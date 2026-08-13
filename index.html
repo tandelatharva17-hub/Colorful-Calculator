@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colorful Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgb(107, 172, 165);
+      color: #333;
+      padding: 20px;
+    }
+
+    .calculator {
+      width: 360px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(64, 62, 62, 0.95), rgba(79, 78, 78, 0.8));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .screen {
+      background: linear-gradient(180deg, #263238, #37474f);
+      color: #39cee1;
+      font-size: 2rem;
+      text-align: right;
+      padding: 22px 24px;
+      letter-spacing: 0.5px;
+      min-height: 100px;
+    }
+
+    .screen .result {
+      display: block;
+      word-wrap: break-word;
+      line-height: 1.2;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+    }
+
+    button {
+      border: none;
+      border-radius: 18px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      padding: 18px 0;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-number {
+      background: linear-gradient(145deg, #e7e4e4, #f6f3f3);
+      color: #0b0b0b;
+    }
+
+    .btn-operator {
+      background: linear-gradient(145deg, #f5f4f7, #ebebed);
+      color: #090909;
+    }
+
+    .btn-clear {
+      grid-column: span 2;
+      background: linear-gradient(145deg, #f6f5f4, #f5f3f3);
+      color: #0d0d0d;
+    }
+
+    .btn-equals {
+      grid-column: span 2;
+      background: linear-gradient(145deg, #e9ebea, #d4d7d2);
+      color: #0f0e0e;
+    }
+
+    @media (max-width: 420px) {
+      .calculator {
+        width: 100%;
+      }
+
+      .screen {
+        font-size: 1.7rem;
+        padding: 18px 18px;
+      }
+
+      button {
+        padding: 16px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="screen">
+      <span id="display" class="result">0</span>
+    </div>
+    <div class="buttons">
+      <button class="btn-clear" data-action="clear">C</button>
+      <button class="btn-operator" data-action="delete">DEL</button>
+      <button class="btn-operator" data-value="/">÷</button>
+      <button class="btn-operator" data-value="*">×</button>
+
+      <button class="btn-number" data-value="7">7</button>
+      <button class="btn-number" data-value="8">8</button>
+      <button class="btn-number" data-value="9">9</button>
+      <button class="btn-operator" data-value="-">−</button>
+
+      <button class="btn-number" data-value="4">4</button>
+      <button class="btn-number" data-value="5">5</button>
+      <button class="btn-number" data-value="6">6</button>
+      <button class="btn-operator" data-value="+">+</button>
+
+      <button class="btn-number" data-value="1">1</button>
+      <button class="btn-number" data-value="2">2</button>
+      <button class="btn-number" data-value="3">3</button>
+      <button class="btn-equals" data-action="equals">=</button>
+
+      <button class="btn-number" data-value="0" style="grid-column: span 2;">0</button>
+      <button class="btn-number" data-value=".">.</button>
+      <button class="btn-operator" data-value="%">%</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    let currentValue = '';
+
+    function updateDisplay(value) {
+      display.textContent = value || '0';
+    }
+
+    function clearCalculator() {
+      currentValue = '';
+      updateDisplay(currentValue);
+    }
+
+    function deleteLastChar() {
+      currentValue = currentValue.slice(0, -1);
+      updateDisplay(currentValue);
+    }
+
+    function appendSymbol(symbol) {
+      if (symbol === '.' && currentValue.slice(-1) === '.') return;
+      if (symbol === '%' && currentValue === '') return;
+      currentValue += symbol;
+      updateDisplay(currentValue);
+    }
+
+    function calculateResult() {
+      if (!currentValue) return;
+      try {
+        const sanitized = currentValue.replace(/×/g, '*').replace(/÷/g, '/');
+        const result = Function('return ' + sanitized)();
+        currentValue = String(result);
+      } catch (error) {
+        currentValue = 'Error';
+      }
+      updateDisplay(currentValue);
+    }
+
+    document.querySelector('.buttons').addEventListener('click', (event) => {
+      const button = event.target.closest('button');
+      if (!button) return;
+
+      const action = button.dataset.action;
+      const value = button.dataset.value;
+
+      if (action === 'clear') {
+        clearCalculator();
+      } else if (action === 'delete') {
+        deleteLastChar();
+      } else if (action === 'equals') {
+        calculateResult();
+      } else if (value) {
+        appendSymbol(value);
+      }
+    });
+
+    window.addEventListener('keydown', (event) => {
+      const key = event.key;
+      if ((key >= '0' && key <= '9') || key === '.' || key === '+' || key === '-' || key === '*' || key === '/' || key === '%') {
+        appendSymbol(key);
+      } else if (key === 'Enter' || key === '=') {
+        calculateResult();
+      } else if (key === 'Backspace') {
+        deleteLastChar();
+      } else if (key.toLowerCase() === 'c') {
+        clearCalculator();
+      }
+    });
+  </script>
+</body>
+</html>
