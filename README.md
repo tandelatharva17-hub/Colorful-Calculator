@@ -4,7 +4,7 @@ A colorful and responsive calculator built using HTML, CSS and JavaScript.
 
 ## 📸 Preview
 
-![Colorful Calculator](Screenshot%202026-08-13.png)
+![Colorful Calculator](calculator.png)
 
 ## 🌐 Live Demo
 
