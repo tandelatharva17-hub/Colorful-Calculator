@@ -2,6 +2,10 @@
 
 A colorful and responsive calculator built using HTML, CSS and JavaScript.
 
+## 📸 Preview
+
+![Colorful Calculator](Screenshot%202026-08-13.png)
+
 ## 🌐 Live Demo
 
 [Open Calculator](https://tandelatharva17-hub.github.io/Colorful-Calculator/)
