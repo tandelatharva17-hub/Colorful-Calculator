@@ -8,8 +8,11 @@ A colorful and responsive calculator built using HTML, CSS and JavaScript.
 
 ## 🌐 Live Demo
 
-[Open Calculator](https://tandelatharva17-hub.github.io/Colorful-Calculator/)
+🔗 [Open Colorful Calculator](https://tandelatharva17-hub.github.io/Colorful-Calculator/)
 
+## 💻 Source Code
+
+🔗 [View Source Code](https://github.com/tandelatharva17-hub/Colorful-Calculator)
 ## ✨ Features
 
 - Basic arithmetic operations
